@@ -1,0 +1,59 @@
+-- before starting any of this, make sure that you put the device in development mode and note the ip address
+
+-- go to where all the tools are
+cd "C:\Program Files (x86)\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.0.15\dependencies\tools\bin"
+
+-- create a new debug token
+blackberry-debugtokenrequest -storepass storepass -devicepin 2A180432 debugtokens\debugtoken.bar
+	Info: Debug token created.
+
+-- make sure that all went well	
+blackberry-debugtokenrequest -verify debugtokens\debugtoken.bar
+	Issue Date: June 28, 2012 8:02:59 PM EDT
+	Expiry Date: July 28, 2012 8:02:59 PM EDT
+	Devices:
+		702102004
+
+	Info: Debug token verified.
+
+-- poke around in the manifest to see what just happened
+cd debugtokens
+7z x BB10_Dev_Alpha_debugtoken_29D939F4.bar
+more META-INF\MANIFEST.MF
+
+	Archive-Manifest-Version: 1.2
+	Archive-Created-By: BlackBerry BAR Packager v1.4
+
+	Package-Author: New Toronto Group
+	Package-Name: debug.token
+	Package-Version: 0.0.0.8
+	Package-Type: debug-token
+	Package-Author-Certificate-Hash: 20bFKSS4pWsrrrMwXvQ2NVRD1zolCHmByOHNFcTKm_KHGC5_LN8uI6xXfEP65k_mnO1ff8VqfhJen5M0HZZ_0Q
+	Package-Author-Id: gYAAgIG7M5pAq_8CybLba7ZzfAw
+	Package-Id: gYABgMNE70HQTeURpSEp1sueNzo
+	Package-Version-Id: gYACgCsZajWBuKhK76qZj7d9LVc
+	Package-Issue-Date: 2012-06-29T00:02:59Z
+
+	Debug-Token-System-Actions: execute,multi_window,multi_instance,run_air_native,run_native
+	Debug-Token-Expiry-Date: 2012-07-29T00:02:59Z
+	Debug-Token-Device-Id: 702102004
+	
+
+
+-- put a copy in the SDK's root folder... this replaces the need to edit bbwp.bat
+copy "C:\Program Files (x86)\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.0.15\dependencies\tools\bin\debugtokens\debugtoken.bar" "C:\Program Files (x86)\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.0.15\debugtoken.bar"
+
+-- install it on your device
+blackberry-deploy -installDebugToken "C:\Program Files (x86)\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.0.15\debugtoken.bar" -device 169.254.0.1 -password password
+blackberry-deploy -installDebugToken "C:\Program Files (x86)\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.0.15\debugtoken.bar" -device 192.168.0.57 -password password
+
+
+	Info: Sending request: Install Debug Token
+	Info: Resetting stale session
+	Info: Sending request: Install Debug Token
+	Info: Action: Install Debug Token
+	Info: File size: 2273
+	result::success
+
+
+-- now check the device to make sure that it worked	
