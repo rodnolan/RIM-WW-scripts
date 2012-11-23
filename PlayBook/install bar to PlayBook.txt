@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\blackberry-tablet-sdk\bin\blackberry-deploy" -installApp -password playbook -device 192.168.229.128 -package MyFirstProject.bar

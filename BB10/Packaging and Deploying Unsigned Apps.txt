@@ -1,0 +1,23 @@
+PACKAGING Unsigned Applications
+Must have created an archive of the application files with config.xml in the root.
+
+cd "<SDK ROOT>"
+bbwp C:\bbArchives\MyApplication.zip -d -o C:\bbApplications
+
+Creates C:\bbApplications\MyApplication.bar
+
+DEPLOYING Unsigned Applications
+Must have created an unsigned .bar file
+
+cd "<SDK ROOT>\dependencies\tools\bin"
+blackberry-deploy 
+-installApp 
+-package "C:\bbApplications\MyApplication.bar" 
+-device 169.254.0.5 
+-password qaqa
+
+
+
+
+
+blackberry-deploy -installApp -package "c:/archives/device/POSTGET.bar" -device 192.168.0.48 -password aass

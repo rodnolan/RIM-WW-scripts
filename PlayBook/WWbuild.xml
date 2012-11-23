@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="WWIDE" default="package" basedir="./">
+<!-- the name attribute must include alphabetic characters only; avoid spaces, underscores and all special characters -->
+<!-- the value of the name attribute is used as the basis for various filenames generated during the build process -->
+
+	<description>
+        Build file for a Blackberry WebWorks Application
+    </description>
+
+	<property name="build.base.dir" location="${basedir}\build" />
+
+	<!-- for TabletOS only -->
+	<property name="password" value="playbook" />
+	<property name="tabletIP" value="192.168.68.129" />
+	<property name="build.tabletOS.dir" location="${build.base.dir}\tabletOS" />
+	<property name="sdk.tabletOS.HOME" location="C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.1.0.6" />
+	<property name="sdk.tabletOS.JAVA_HOME" location="${sdk.tabletOS.HOME}\jre" />
+	<property name="bbwp.tabletOS.dir" location="${sdk.tabletOS.HOME}\bbwp"/>
+	<property name="bbwp.TabletOS" location="${bbwp.tabletOS.dir}\bbwp.exe" />
+
+	<property name="sdkbin.dir" location="${bbwp.tabletOS.dir}\blackberry-tablet-sdk\bin"/>
+	<property name="BarDeploy.dir" location="${bbwp.dir}\blackberry-tablet-sdk\lib" />
+	<property name="bar.file" location="${build.tabletOS.dir}\${ant.project.name}.bar" />
+	
+	<!-- for SmartphoneOS only -->
+	<property name="build.smartphoneOS.dir" location="${build.base.dir}\smartphoneOS" />
+	<property name="sdk.smartphoneOS.HOME" location="C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK 2.3.0.9" />
+	<property name="sdk.smartphoneOS.JAVA_HOME" location="${env.JAVA_.HOME}\jre" />
+	<property name="bbwp.smartphoneOS.dir" location="${sdk.smartphoneOS.HOME}"/>
+	<property name="bbwp.smartphoneOS" location="${bbwp.smartphoneOS.dir}\bbwp.exe" />
+
+	
+	
+	
+	<target name="init" depends="clean" description="Creates the build.base.dir folder for your archive and bar file" >
+		<mkdir dir="${build.base.dir}"/>
+		<mkdir dir="${build.tabletOS.dir}"/>
+		<mkdir dir="${build.smartphoneOS.dir}"/>
+	</target>
+
+	<target name="zip" depends="init" description="Archive application assets before building the bar" >
+		<zip
+			destfile="${build.base.dir}/${ant.project.name}.zip"
+			basedir="${basedir}"
+			excludes="*.project,*.settings/,build/,build.xml"
+			includes="*,assets/,js/,css/,data/"
+		/>
+	</target>
+	
+	<target name="package" depends="zip" description="create the application installers for the smartphone and the playbook" >
+		
+		<exec executable="${bbwp.smartphoneOS}">
+			<env key="JAVA_HOME" path="${sdk.smartphoneOS.JAVA_HOME}" />
+			<arg value="${build.base.dir}\${ant.project.name}.zip"/>
+			<arg line="-o ${build.smartphoneOS.dir}" />
+			<arg line="-v" />
+		</exec>
+		
+		<exec executable="${bbwp.TabletOS}">
+			<env key="JAVA_HOME" path="${sdk.tabletOS.JAVA_HOME}" />
+			<arg value="${build.base.dir}\${ant.project.name}.zip"/>
+			<arg line="-o ${build.tabletOS.dir}" />
+			<arg line="-v" />
+			<arg line="-d" /> 
+		</exec>
+		
+	</target>
+	
+
+	
+	<target name="deployTablet" depends="package"  description="Deploy the the .bar file to your simulator. The old application is automatically uninstalled." >
+		<java jar="${BarDeploy.dir}/BarDeploy.jar"
+	  		fork="true"
+	  		maxmemory="512M"
+		>
+			<env key="JAVA_HOME" path="${sdk.JAVA_HOME}" />
+			<arg value="-installApp" />
+			<arg value="-launchApp" />
+			<arg value="-password" />
+			<arg value="${password}" />
+			<arg value="-device" />
+			<arg value="${tabletIP}" />
+			<arg value="-package" />
+			<arg value="${bar.file}" />
+		</java>
+	</target>
+
+	<target name="uninstall" description="Uninstall an application from the Simulator. " >
+		<java jar="${BarDeploy.dir}/BarDeploy.jar"
+  		fork="true"
+  		maxmemory="512M"
+		>
+			<env key="JAVA_HOME" path="${sdk.JAVA_HOME}" />
+			<arg value="-uninstallApp" />
+			<arg value="-password" />
+			<arg value="${password}" />
+			<arg value="-device" />
+			<arg value="${tabletIP}" />
+			<arg value="-package" />
+			<arg value="${bar.file}" />
+		</java>
+	</target>
+	
+	<target name="clean" description="clean up" >
+		<!-- Delete the build directory -->
+		<!-- This helps to ensure that the compiled assets are not stale -->
+		<delete dir="${build.tabletOS.dir}"/>
+		<delete dir="${build.smartphoneOS.dir}"/>
+		<delete dir="${build.base.dir}"/>
+	</target>
+	
+</project>

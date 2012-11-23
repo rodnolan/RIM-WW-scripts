@@ -1,0 +1,35 @@
+﻿Updated March 23, 2012
+-------------------------------------------------------------------------------
+Here's a list of useful instructions and commands for deploying applications to the PlayBook.
+
+WebWorks-specific Preparation:
+-------------------------------------------------------------------------------
+	C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\bin\bbwp.properties:
+	Add <developer_cn_signature>Your Company Name</developer_cn_signature>
+
+	C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\bin\sigtool.p12
+	Add a copy of your company's .p12 file here; you must use the filename: sigtool.p12
+
+Creating a Zip archive (WebWorks only)
+-------------------------------------------------------------------------------
+cd C:\RIM_Training\StudentFiles\WebWorks\workspace\MyTravelLog_WW_FINAL
+del C:\RIM_Training\StudentFiles\WebWorks\workspace\MyTravelLog_WW_FINAL\build\*.*
+7z a -r "C:\RIM_Training\StudentFiles\WebWorks\workspace\MyTravelLog_WW_FINAL\build\MyTravelLogWW.zip" *.html *.js *.css *.xml *.png *.woff *.sql *.json
+
+Creating a signed BAR installer (WebWorks only) - don't forget to increment the buildId
+-------------------------------------------------------------------------------
+bbwp "C:\RIM_Training\StudentFiles\WebWorks\workspace\MyTravelLog_WW_FINAL\build\MyTravelLogWW.zip" -d -gcsk cskPassword -gp12 p12Password -buildId 0018 -o "C:\RIM_Training\StudentFiles\WebWorks\workspace\MyTravelLog_WW_FINAL\build\"
+
+Deploy WebWorks or AIR-based BAR files in one of these two ways (the batch file simply calls the java jar for convenience):
+-------------------------------------------------------------------------------
+java -jar "C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.1.0.6\bbwp\blackberry-tablet-sdk\lib\BarDeploy.jar" -installApp -password playbook -device 192.168.0.58 -package "C:\RIM_Training\StudentFiles\WebWorks\workspace\MyTravelLog_WW_FINAL\build\MyTravelLogWW.bar"
+-OR-
+blackberry-deploy.bat -installApp -password playbook -device 192.168.0.7 -package "C:\RIM_Training\StudentFiles\Flex-AIR\workspace\MyTravelLog_AIR_FINAL\MyTravelLog.bar"
+
+Create a Debug Token
+-------------------------------------------------------------------------------
+blackberry-debugtokenrequest -cskpass {cskpassword} -deviceid 0x{devicePIN} -keystore "C:\Users\{you}\AppData\Local\Research In Motion\{your}.p12" -storepass {p12password} "C:\Users\{you}\AppData\Local\Research In Motion\debugtoken.bar"
+
+Deploy a Debug Token
+-------------------------------------------------------------------------------
+blackberry-deploy -installDebugToken "C:\Users\{you}\AppData\Local\Research In Motion\debugtoken.bar" -device {deviceIP} -password {devicePassword}

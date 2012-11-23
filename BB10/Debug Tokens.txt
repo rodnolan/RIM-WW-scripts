@@ -1,0 +1,49 @@
+CREATE Debug Token
+Must have network access
+Must have registered .csj files and received .p12, .csk and .db files
+
+FOR BB10
+
+cd "<SDK ROOT>\dependencies\tools\bin"
+blackberry-debugtokenrequest 
+-storepass storepass 
+-devicepin 2A180432 
+BB10SDK.1.0.2.9.bar
+blackberry-debugtokenrequest -storepass storepass -devicepin 2A180432 BB10SDK.1.0.2.9.bar
+move BB10SDK.1.0.2.9.bar ..\..\..\debugtoken.bar 
+
+file must be named debugtoken.bar and must be placed in <SDK ROOT>
+edits to bbwp.properties that were required with TabletOS SDK are no longer necessary
+
+
+INSTALL Debug Token
+Must have device in Development Mode
+Must have created debugtoken.bar
+
+cd "<SDK ROOT>\dependencies\tools\bin"
+blackberry-deploy 
+-installDebugToken "..\..\..\debugtoken.bar" 
+-device 169.254.0.5 
+-password qaqa
+
+
+cd "C:\Program Files (x86)\Research In Motion\BlackBerry 10 WebWorks SDK 1.0.2.9\dependencies\tools\bin"
+blackberry-debugtokenrequest -storepass storepass -devicepin 2A180432 BB10SDK.1.0.2.9.bar
+move BB10SDK.1.0.2.9.bar ..\..\..\debugtoken.bar 
+blackberry-deploy -installDebugToken "..\..\..\debugtoken.bar" -device 192.168.0.48 -password qaqa
+
+
+FOR PLAYBOOK
+
+cd "C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\blackberry-tablet-sdk\bin" 
+REM create debug token:
+blackberry-debugtokenrequest -storepass storepass -devicepin 5020022E debugtoken.bar
+REM setup the debug token: 
+move debugtoken.bar "C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\"
+REM deploy debug token to device:
+blackberry-deploy -installDebugToken debugtoken.bar -device 192.168.0.32 -password qaqa
+
+edit C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\bin\bbwp.properties  to include debug token file path
+
+<debug_token>C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\debugtoken.bar</debug_token>
+

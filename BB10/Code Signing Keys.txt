@@ -1,0 +1,17 @@
+REGISTER Code Signing Keys
+Must have network access
+Must have received .csj file via email
+
+cd "<SDK ROOT>\dependencies\tools\bin"
+blackberry-signer 
+-register 
+-csjpin regpin 
+-storepass storepass
+"C:\Users\Rod Nolan\Downloads\client-RDK-1928353.csj"
+"C:\Users\Rod Nolan\Downloads\client-PBDT-1928353.csj"
+
+Creates three files: 
+
+C:\Users\Rod Nolan\AppData\Local\Research In Motion\author.p12
+C:\Users\Rod Nolan\AppData\Local\Research In Motion\barsigner.csk
+C:\Users\Rod Nolan\AppData\Local\Research In Motion\barsigner.db

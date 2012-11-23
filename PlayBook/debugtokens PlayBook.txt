@@ -1,0 +1,47 @@
+apply for signing keys
+
+to register signing keys:
+blackberry-signer –register –csjpin regpin –storepass qwerty
+C:\keys\client-RDK-488888888.csj C:\keys\client-PBDT-488888888.csj
+
+make a backup of 
+	%HOMEPATH%\AppData\Local\Research In Motion\author.p12
+	%HOMEPATH%\AppData\Local\Research In Motion\barsigner.csk
+	%HOMEPATH%\AppData\Local\Research In Motion\barsigner.db
+
+cd "C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\blackberry-tablet-sdk\bin" 
+
+REM to create debug token:
+blackberry-debugtokenrequest -storepass storepass -devicepin 5020022E debugtoken.bar
+
+REM to setup the debug token: 
+move debugtoken.bar "C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\"
+
+
+REM to deploy debug token to device:
+blackberry-deploy -installDebugToken debugtoken.bar -device 192.168.0.32 -password qaqa
+
+then, edit C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\bin\bbwp.properties  to include debug token file path
+
+<debug_token>C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\debugtoken.bar</debug_token>
+
+
+
+create an app: 
+create index.html and config.xml
+archive them: testapp.zip
+
+package app: 
+bbwp testapp.zip -d
+  this creates bin\testapp.bar
+
+deploy it to the playbook:
+
+blackberry-deploy -installApp -password <device password> -device <IP address of device> -package <BAR file path>
+blackberry-deploy -installApp -password qaqa              -device 169.254.254.5 -package bin\testapp.bar
+
+
+cd "C:\Program Files (x86)\Research In Motion\BlackBerry WebWorks SDK for TabletOS 2.2.0.5\bbwp\blackberry-tablet-sdk\bin\"
+
+blackberry-deploy -installApp -password qaqa -device 169.254.254.5 -package "C:\Users\Rod Nolan\Desktop\test app\bin\testapp.bar"
+
